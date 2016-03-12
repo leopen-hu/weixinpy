@@ -4,25 +4,13 @@
 import web
 import lxml
 import os
-import sys
-import time
-import urllib2
 import hashlib
-import json
-import imp
 import handlers.textposthandler
 import plugins.requests
 from lxml import etree
 
 # global variable
 _TOKEN = 'leopenweixin'
-
-
-# custom classes
-class BusResponse:
-    def __init__(self, req):
-        self.touser = ''
-        self.fromuser = ''
 
 
 class TmplResponse:
@@ -47,7 +35,7 @@ class FormattedResponse:
         self.render = web.template.render(self.templates_root)
         self.resp = resp
 
-    def getresponser(self):
+    def getresponse(self):
         resp = self.resp
         resptype = resp.type
         if resptype == 'text':
@@ -91,15 +79,14 @@ class WeixinHandler:
         selector = ReqHandlerSelector(req)
         resp = selector.handler.getresponse()
         response = FormattedResponse(resp)
-        return response
+        return response.getresponse()
 
 
 # commonly used functions
-def gethashcode(*arg):
-        timestamp = arg[0]
-        nonce = arg[1]
-        token = arg[2]
-        newlist = [token, timestamp, nonce]
+def gethashcode(*args):
+        newlist = []
+        for arg in args:
+            newlist.append(arg)
         newlist.sort()
         sha1 = hashlib.sha1()
         map(sha1.update, newlist)
