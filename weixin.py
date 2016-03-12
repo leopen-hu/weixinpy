@@ -12,37 +12,50 @@ import json
 import imp
 import handlers.textposthandler
 import plugins.requests
-
 from lxml import etree
-#global variable
-TOKEN = 'leopenweixin'
 
-#custom classes
+# global variable
+_TOKEN = 'leopenweixin'
+
+
+# custom classes
 class BusResponse:
-    def __init__(self):
-        self.type = ''
+    def __init__(self, req):
         self.touser = ''
         self.fromuser = ''
 
+
 class TmplResponse:
-    pass
-
-class HandlerLoader:
     def __init__(self):
-        self.handlers = []
+        pass
 
-class HandlerChoice:
-    def __init__(self, xml):
-        msgtype = xml.find('MsgType').text
+
+class ReqHandlerSelector:
+    def __init__(self, req):
+        msgtype = req.find('MsgType').text
         if msgtype == 'text':
-            self.handler = texthandler.TextHandler(xml)
+            self.req = plugins.requests.TextPostRequest(req)
+            self.handler = handlers.textposthandler.TextReqHandler(self.req)
         else:
             pass
 
-    def getresp(self):
-        resp = BusResponse()
-        self.handler.prefix_handler()
-        return resp
+
+class FormattedResponse:
+    def __init__(self, resp):
+        self.app_root = os.path.dirname(__file__)
+        self.templates_root = os.path.join(self.app_root, 'templates')
+        self.render = web.template.render(self.templates_root)
+        self.resp = resp
+
+    def getresponser(self):
+        resp = self.resp
+        resptype = resp.type
+        if resptype == 'text':
+            self.render = self.render.reply_text(resp.touser, resp.fromuser, resp.createtime, resp.content)
+        else:
+            pass
+        return self.render
+
 
 class TemplateChoice:
     def __init__(self, resp):
@@ -57,37 +70,37 @@ class TemplateChoice:
         pass
         return resp
 
-#main class
+
+# main class
 class WeixinHandler:
     def __init__(self):
         self.app_root = os.path.dirname(__file__)
         self.templates_root = os.path.join(self.app_root, 'templates')
         self.render = web.template.render(self.templates_root)
 
-
     def GET(self):
         req = web.input()
-        global TOKEN
-        hashcode = gethashcode(req.timestamp, req.nonce, TOKEN)
+        global _TOKEN
+        hashcode = gethashcode(req.timestamp, req.nonce, _TOKEN)
         if hashcode == req.signature:
             return req.echostr
 
     def POST(self):
         req = web.data()
-        req_xml = etree.fromstring(req)
-        req_handler = HandlerChoice(req_xml)
-        #bus_resp = req_handler.getresp()
-        #tmpl_handler = TemplateChoice(bus_resp)
-        #tmpl_resp = tmpl_handler.getresp()
-        return req_handler.handler.msgid
+        req = etree.fromstring(req)
+        selector = ReqHandlerSelector(req)
+        resp = selector.handler.getresponse()
+        response = FormattedResponse(resp)
+        return response
 
-#commonly used functions
+
+# commonly used functions
 def gethashcode(*arg):
         timestamp = arg[0]
         nonce = arg[1]
         token = arg[2]
-        list = [token,timestamp,nonce]
-        list.sort()
+        newlist = [token, timestamp, nonce]
+        newlist.sort()
         sha1 = hashlib.sha1()
-        map(sha1.update,list)
+        map(sha1.update, newlist)
         return sha1.hexdigest()

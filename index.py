@@ -3,16 +3,20 @@
 
 import web
 import site
-from main import WeixinRequest
+from weixin import WeixinHandler
 
 urls = (
-    '/(.*)/', 'redirect',
+    '/(.*)/', 'Redirect',
     '/site', site,
-    '/', 'WeixinRequest'
+    '/', 'WeixinHandler'
 )
 app = web.application(urls, globals())
 
-class redirect:
+
+class Redirect:
+    def __init__(self):
+        pass
+
     def GET(self, path):
         web.seeother('/' + path)
 
