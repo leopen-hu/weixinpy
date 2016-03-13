@@ -30,12 +30,12 @@
 
 ### 不同的逻辑部分：
 *不同的逻辑部分主要在getresponse()内部和一些@staticmethod方法。*
-
-1. TextReqHandler:
+#### TextReqHandler:
     
     _KEYWORDS = {'天气': 'getweather', '温度': 'gettemperature'}
     _PREFIX = {'1001': 'repeatwords', '1002': 'translate'}
     _MYSPLIT = '+'
+    
 1. getresponse()--根据请求内容决定执行哪种@staticmethod方法，多种情况:
     * 如果是关键字命令，则执行关键字命令对应的@staticmethod方法，关键字命令与@staticmethod方法的对应关系通过全局字典变量_KEYWORDS定义；
     * 如果不是关键字命令，则视为是前缀命令，分解前缀与真实的请求内容，分割符在全局变量_MYSPLIT定义：
