@@ -6,9 +6,10 @@
 
 ## 总体逻辑
 
-1. 访问应用会首先访问index.wsgi文件，根据路由规则，访问根目录的请求会被weixin.py的WeixinHandler类处理。
-2. 当访问是一个GET请求，GET()方法提供默认的微信服务器配置返回功能。
-3. 当访问是一个POST请求，POST会对请求进行处理并给出回应，具体逻辑如下：
+访问应用会首先访问index.wsgi文件，根据路由规则，访问根目录的请求会被weixin.py的WeixinHandler类处理:
+
+* 当访问是一个GET请求，GET()方法提供默认的微信服务器配置返回功能。
+* 当访问是一个POST请求，POST会对请求进行处理并给出回应，具体逻辑如下：
     1. 获取post数据（web.data()）并解析生成格式化的请求req，解析使用的是lxml模块的etree.fromstring()方法；
     2. 根据解析后的请求生成一个请求处理器的选择器（ReqHandlerSelector），该选择器的作用是--根据请求类型确定处理器类型，根据请求内容实例化一个处理器：
         1. 依据req的类型将req转化为对应class的一个实例（如‘text’请求会被转化为一个TextPostRequest实例）并作为选择器的self.req属性；
