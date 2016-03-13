@@ -33,7 +33,6 @@
 2. 不同的逻辑部分：
 
 *不同的逻辑部分主要在getresponse()内部和一些@staticmethod方法。*
-    
     1. TextReqHandler:
 
             _KEYWORDS = {'天气': 'getweather', '温度': 'gettemperature'}
