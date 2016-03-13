@@ -13,11 +13,6 @@ from lxml import etree
 _TOKEN = 'leopenweixin'
 
 
-class TmplResponse:
-    def __init__(self):
-        pass
-
-
 class ReqHandlerSelector:
     def __init__(self, req):
         msgtype = req.find('MsgType').text
@@ -53,11 +48,6 @@ class TemplateChoice:
         else:
             pass
 
-    def getresp(self):
-        resp = TmplResponse()
-        pass
-        return resp
-
 
 # main class
 class WeixinHandler:
@@ -74,8 +64,8 @@ class WeixinHandler:
             return req.echostr
 
     def POST(self):
-        req = web.data()
-        req = etree.fromstring(req)
+        req_xml = web.data()
+        req = etree.fromstring(req_xml)
         selector = ReqHandlerSelector(req)
         resp = selector.handler.getresponse()
         response = FormattedResponse(resp)

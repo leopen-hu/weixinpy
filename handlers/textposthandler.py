@@ -66,14 +66,14 @@ class TextReqHandler:
     @staticmethod
     def gettemperature():
         resp = dict()
-        resp['type'] = 'text'
+        resp['type'] = ''
         pass
         return resp
 
     @staticmethod
     def repeatwords(words):
         resp = dict()
-        resp['type'] = ''
+        resp['type'] = 'text'
         resp['content'] = words
         return resp
 
