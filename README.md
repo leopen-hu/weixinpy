@@ -36,15 +36,16 @@
     _PREFIX = {'1001': 'repeatwords', '1002': 'translate'}
     _MYSPLIT = '+'
     
-1. getresponse()--根据请求内容决定执行哪种@staticmethod方法，多种情况:
+1. getresponse():
+*根据请求内容决定执行哪种@staticmethod方法，多种情况:*
     * 如果是关键字命令，则执行关键字命令对应的@staticmethod方法，关键字命令与@staticmethod方法的对应关系通过全局字典变量_KEYWORDS定义；
     * 如果不是关键字命令，则视为是前缀命令，分解前缀与真实的请求内容，分割符在全局变量_MYSPLIT定义：
         * 如果分解成功，查看前缀与@staticmethod方法的对应关系--全局字典变量_PREFIX定义：
-            * 如果找不到对应关系，直接调用显示菜单方法；
-            * 如果找到对应关系，调用对应@staticmethod方法；
+            > 如果找不到对应关系，直接调用显示菜单方法；
+            > 如果找到对应关系，调用对应@staticmethod方法；
         * 如果分解失败，则直接调用显示菜单方法；
 2. 复杂的@staticmethod方法解释:
-暂无
+*暂无*
 
 
 
