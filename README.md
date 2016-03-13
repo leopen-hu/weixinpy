@@ -19,20 +19,18 @@
     4. 根据返回值，生成一个格式化返回值类型的实例
     5. 执行该实例的getresponse()方法获取最终需要返回到请求者的结果并对POST请求进行响应。
 
-*以上步骤中的第2,3步根据请求类型不同会有不同类型的处理器。一下是各个类型处理器的逻辑。*
+*以上步骤中的第2,3步根据请求类型不同会有不同类型的处理器。*
 
 ## 处理器逻辑
 
-1. 相同的逻辑部分：
-
+### 相同的逻辑部分：
     1. 实例化时执行__init__(self)函数，获取该实例的两个属性req和resp（req即参数传递过来的请求，resp是一个实例化的Response）
         *Response是处理器的返回值的公共类，包含了所有返回值的共有属性，这些属性在实例化时根据req赋值。
     2. 定义了getresponse()函数用于处理请求，根据请求类型及内容决定执行哪种@staticmethod方法，调用该方法并获取结果，使用该结果为self.resp属性添加Response类之外的属性，最后将self.resp作为返回值返回。
     3. 定义了一些@staticmethod方法，getresponse()需要调用。
 
-2. 不同的逻辑部分：
-
-*不同的逻辑部分主要在getresponse()内部和一些@staticmethod方法。*
+### 不同的逻辑部分：
+    *不同的逻辑部分主要在getresponse()内部和一些@staticmethod方法。*
     1. TextReqHandler:
 
             _KEYWORDS = {'天气': 'getweather', '温度': 'gettemperature'}
