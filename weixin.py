@@ -5,7 +5,7 @@ import web
 import lxml
 import os
 import hashlib
-import handlers.textposthandler
+import handlers
 import plugins.requests
 from lxml import etree
 
@@ -19,6 +19,9 @@ class ReqHandlerSelector:
         if msgtype == 'text':
             self.req = plugins.requests.TextPostRequest(req)
             self.handler = handlers.textposthandler.TextReqHandler(self.req)
+        elif msgtype == 'click':
+            self.req = plugins.requests.EventPostRequest(req)
+            self.handler = handlers.clickpostthandler.ClicReqHandler(self.req)
         else:
             pass
 
@@ -38,15 +41,6 @@ class FormattedResponse:
         else:
             pass
         return self.render
-
-
-class TemplateChoice:
-    def __init__(self, resp):
-        resptype = resp.type
-        if resptype == 'text':
-            pass
-        else:
-            pass
 
 
 # main class
