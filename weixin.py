@@ -15,13 +15,27 @@ _TOKEN = 'leopenweixin'
 
 class ReqHandlerSelector:
     def __init__(self, req):
+        self.req = req
         msgtype = req.find('MsgType').text
         if msgtype == 'text':
             self.req = plugins.requests.TextPostRequest(req)
             self.handler = handlers.textposthandler.TextReqHandler(self.req)
-        elif msgtype == 'click':
-            self.req = plugins.requests.EventPostRequest(req)
-            self.handler = handlers.clickpostthandler.ClicReqHandler(self.req)
+        elif msgtype == 'event':
+            event = req.find('Event').text
+            if event == 'subscribe':
+                # if a scan before subscribe
+                if req.find('EventKey').text:
+                    pass
+                else:
+                    pass
+
+            elif event == 'unsubscribe':
+                pass
+            elif event == 'CLICK' or event == 'VIEW':
+                self.req = plugins.requests.MenuEventPostRequest(req)
+                self.handler = handlers.menuposthandler.MenuReqHandler(self.req)
+            elif event == 'LOCATION':
+                pass
         else:
             pass
 

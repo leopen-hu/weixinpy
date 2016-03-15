@@ -5,14 +5,14 @@
 import logging
 import urllib2
 import json
-from commonfunc import showmenu
+from commonfunc import BusinessMethod
 import plugins.responses
 
 # global variable
 _KEYWORDS = {
     '天气': 'getweather',
     '温度': 'gettemperature',
-    '0000': 'showmenu'
+    '0000': 'BusinessMethod.showmenu'
 }
 _PREFIX = {'1001': 'repeatwords', '1002': 'translate'}
 _MYSPLIT = '+'
@@ -46,8 +46,8 @@ class TextReqHandler:
                 except Exception as e:
                     logging.exception(e)
                     # no match command
-                    errcode = '0'
-                    funcresp = showmenu(errcode)
+                    errcode = 0
+                    funcresp = BusinessMethod.showmenu(errcode)
                 else:
                     try:
                         # if a right prefix
@@ -55,17 +55,16 @@ class TextReqHandler:
                     except Exception as e:
                         logging.exception(e)
                         # no match prefix
-                        errcode = '1'
-                        funcresp = showmenu(errcode)
+                        errcode = 1
+                        funcresp = BusinessMethod.showmenu(errcode)
         finally:
             for key, value in funcresp.iteritems():
                 self.resp.__dict__[key] = value
         return self.resp
 
     # ----------------------------------------staticmethod-----------------------------------------------
-    # define all common functions in this section
-    # common function means function which can run without the class
-    # for example you can make a 'switch' function here
+    # define all staticmethod in this section
+    # staticmethod means function which can run out of the class
     @staticmethod
     def getweather():
         resp = dict()
